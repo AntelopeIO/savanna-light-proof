@@ -1,0 +1,5 @@
+{
+    "network":"EOS Mainnet",
+    "api_endpoint":"http://127.0.0.1:8888",
+    "ship_endpoint":"ws://127.0.0.1:8080"
+}
