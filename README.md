@@ -21,8 +21,8 @@ This is work-in-progress :
 ## Installation
 
 ```bash
-git clone <repo>
-cd <repo>
+git clone https://github.com/AntelopeIO/savanna-light-proof
+cd savanna-light-proof
 npm install
 ```
 
