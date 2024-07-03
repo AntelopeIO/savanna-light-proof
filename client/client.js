@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import chalk from 'chalk';
 
 import {Session} from '@wharfkit/session';
@@ -64,24 +63,30 @@ const testStatusEndpoint = async () => {
   try {
     const response = await axios.get(`${baseURL}/status`);
     console.log("response : ", response.data);
+
+    console.log("end of satatus test.");
+    console.log("");
+
+    await new Promise(r => setTimeout(r, 1000));
+
+    return response.data;
+
   console.log("");
   } catch (error) {
     console.error('Error testing /status endpoint:', error);
     console.log("");
+    process.exit(1);
   }
-
-  console.log("end of satatus test.");
-  console.log("");
 
 };
 
-const testProofsEndpoint = async () => {
+const testProofsEndpoint = async (status) => {
 
   console.log("testing proofs...");
   console.log("");
 
-  let finality_req = {"type":"finality", "data":{"target_block":58, "qc_block":60}};
-  let inclusion_req =  {"type":"inclusion", "data":{"target_block":37, "qc_block":39}};
+  let finality_req = {"type":"finality", "data":{"target_block":status.last_block.final_on_strong_qc_block_num, "qc_block":status.last_block.block_num}};
+  let inclusion_req =  {"type":"inclusion", "data":{"target_block":status.last_block.final_on_strong_qc_block_num, "qc_block":status.last_block.block_num}};
 
   try {
     const response = await axios.post(`${baseURL}/proofs`, finality_req);
@@ -95,11 +100,10 @@ const testProofsEndpoint = async () => {
     console.log("request : ", finality_req);
     console.error('Error testing /proofs endpoint:', error);
     console.log("");
+    process.exit(1);
   }
-  
-  return;
 
-  await new Promise(r => setTimeout(r, 2000));
+  await new Promise(r => setTimeout(r, 1000));
 
   try {
     const response = await axios.post(`${baseURL}/proofs`, inclusion_req);
@@ -113,15 +117,18 @@ const testProofsEndpoint = async () => {
     console.log("request : ", inclusion_req);
     console.error('Error testing /proofs endpoint:', error);
     console.log("");
+    process.exit(1);
   }
 
   console.log("end of proof test.");
 
+  await new Promise(r => setTimeout(r, 1000));
+
 };
 
 const runTests = async () => {
-  await testStatusEndpoint();
-  await testProofsEndpoint();
+  let status = await testStatusEndpoint();
+  await testProofsEndpoint(status);
 };
 
 runTests();

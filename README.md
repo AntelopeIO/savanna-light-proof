@@ -44,11 +44,6 @@ Copy config.jsonc.example to config.jsonc and edit file:
 npm run start
 ```
 
-## Running Client Tests
-
-```bash
-npm run test
-```
 ## Usage
 
 See client/client.js for usage examples
